@@ -201,6 +201,15 @@ def complementMinters(mt, dc, size):
 def complement(mt):    
     return [ i+"`" if len(i) == 1 else i[0] for i in mt]
 
+def a2xC(m, cs):
+    _A_INDEX = 65   
+    if len(m) == 2:
+        return cs[ord(m[0])- _A_INDEX] + m[1]
+    return cs[ord(m[0])- _A_INDEX]
+
+def a2x(mt, cs = "WXYZ"): 
+    return [ [ [ a2xC(j, cs) for j in i ] for i in k ] for k in mt ]
+
 if __name__ == "__main__":    
     mt = [int(i) for i in input("Enter the minterms: ").strip().split()]
     dc = [int(i) for i in input("Enter the don't cares(If any): ").strip().split()]
@@ -209,7 +218,7 @@ if __name__ == "__main__":
     mtC = complementMinters(mt, dc, size)
     pos_results = QMMethod(mt, dc, size)
     sop_complements_results = QMMethod(mtC, dc, size)
-
+    # for final_result in a2x(pos_results,a):
     for final_result in pos_results:
         print('\n\nSOP Solution: F = '+' + '.join(''.join(i) for i in final_result))
     for final_result in sop_complements_results:
