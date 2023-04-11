@@ -4,7 +4,7 @@ https://github.com/int-main/Quine-McCluskey 의 번역, 오류 수정 및 기능
 
 논리식을 최소화하는 Quine McCluskey 알고리즘을 Python 3 구현했습니다.
 
-minterms 과 don't care terms을 입력으로 사용한 다음 축소된 표현식을 생성합니다.
+minterms 과 don't care terms을 입력으로 사용한 다음 최소화된 표현식을 출력합니다..
 
 결과를 계산하는 전체 프로세스가 표시됩니다.
 

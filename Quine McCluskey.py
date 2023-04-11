@@ -171,12 +171,25 @@ removeTerms(chart,EPI) # Remove EPI related columns from chart
 if(len(chart) == 0): # If no minterms remain after removing EPI related columns
     final_result = [findVariables(i) for i in EPI] # Final result with only EPIs
 else: # Else follow Petrick's method for further simplification
-    P = [[findVariables(j) for j in chart[i]] for i in chart]
+    P = [[str(j) for j in chart[i]] for i in chart]    
+    _A_INDEX = 65
+    def convert2tempMap(ps ,tempMap):
+        return [ chr(tempMap.index(i) + _A_INDEX ) for i in ps ]
+    def tempMap2convert(ps ,tempMap):
+        return [ tempMap[ord(i) - _A_INDEX ] for i in ps ]
+    tempMap = list(set( ( j for i in P for j in i )))
+    P = [ convert2tempMap(i, tempMap) for i in P ]    
     while len(P)>1: # Keep multiplying until we get the SOP form of P
         P[1] = multiply(P[0],P[1])
         P.pop(0)
-    final_result = [min(P[0],key=len)] # Choosing the term with minimum variables from P
+    P = P[0]
+    P = (  [k for k in j] for j in  set(("".join(sorted(i)) for i in P)) )
+    P = ( tempMap2convert(i, tempMap) for i in P )
+    P = ( [ findVariables(j) for j in i] for i in P )
+    
+    final_result = min(P,key=len) # Choosing the term with minimum variables from P    
     final_result.extend(findVariables(i) for i in EPI) # Adding the EPIs to final solution
+
 print('\n\nSolution: F = '+' + '.join(''.join(i) for i in final_result))
 
 input("\nPress enter to exit...")
