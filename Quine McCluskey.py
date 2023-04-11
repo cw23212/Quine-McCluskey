@@ -186,6 +186,8 @@ def QMMethod(mt, dc, size):
         min_length = min((len(j) for j in P))
         P = [ i for i in P if len(i) == min_length ]
         P = [ [ findVariables(j) for j in i] for i in P ]       
+        min_length = min( sum(len(j) for j in i) for i in P )
+        P = [ i for i in P if sum(len(j) for j in i) == min_length ]
         [ i.extend(findVariables(j) for j in EPI) for i in P ]        
         final_results = P
     return final_results
