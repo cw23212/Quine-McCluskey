@@ -190,11 +190,24 @@ def QMMethod(mt, dc):
         final_results = P
     return final_results
         
+def complementMinters(mt):
+    minterms = mt+dc
+    minterms.sort()
+    size = len(bin(minterms[-1])) - 2
+    return [ i for i in range(2**size) if i not in mt ]
+
+def complement(mt):    
+    return [ i+"`" if len(i) == 1 else i[0] for i in mt]
 
 if __name__ == "__main__":    
     mt = [int(i) for i in input("Enter the minterms: ").strip().split()]
     dc = [int(i) for i in input("Enter the don't cares(If any): ").strip().split()]
-    final_results = QMMethod(mt, dc)    
-    for final_result in final_results:
-        print('\n\nSolution: F = '+' + '.join(''.join(i) for i in final_result))
-    input("\nPress enter to exit...")
+    mtC = complementMinters(mt)
+    pos_results = QMMethod(mt, dc)
+    sop_complements_results = QMMethod(mtC, dc)
+
+    for final_result in pos_results:
+        print('\n\nSOP Solution: F = '+' + '.join(''.join(i) for i in final_result))
+    for final_result in sop_complements_results:
+        print('\n\nPOS Solution: F = '+''.join( "(" + '+'.join(complement(i)) + ")" for i in final_result))
+    
