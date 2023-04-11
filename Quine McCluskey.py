@@ -85,11 +85,11 @@ def removeTerms(_chart,terms): # Removes minterms which are already covered from
                 del _chart[j]
             except KeyError:
                 pass
-def QMMethod(mt, dc):
+def QMMethod(mt, dc, size):
     mt.sort()
     minterms = mt+dc
     minterms.sort()
-    size = len(bin(minterms[-1]))-2
+    size = size if size != None else len(bin(minterms[-1]))-2
     groups,all_pi = {},set()
 
     # Primary grouping starts
@@ -190,10 +190,10 @@ def QMMethod(mt, dc):
         final_results = P
     return final_results
         
-def complementMinters(mt):
+def complementMinters(mt, dc, size):
     minterms = mt+dc
     minterms.sort()
-    size = len(bin(minterms[-1])) - 2
+    size = size if size != None else len(bin(minterms[-1])) - 2
     return [ i for i in range(2**size) if i not in mt ]
 
 def complement(mt):    
@@ -202,9 +202,11 @@ def complement(mt):
 if __name__ == "__main__":    
     mt = [int(i) for i in input("Enter the minterms: ").strip().split()]
     dc = [int(i) for i in input("Enter the don't cares(If any): ").strip().split()]
-    mtC = complementMinters(mt)
-    pos_results = QMMethod(mt, dc)
-    sop_complements_results = QMMethod(mtC, dc)
+    size = input("Enter value length(default=minimum length based on minterm):")    
+    size = int(size) if size else None
+    mtC = complementMinters(mt, dc, size)
+    pos_results = QMMethod(mt, dc, size)
+    sop_complements_results = QMMethod(mtC, dc, size)
 
     for final_result in pos_results:
         print('\n\nSOP Solution: F = '+' + '.join(''.join(i) for i in final_result))
