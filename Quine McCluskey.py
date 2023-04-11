@@ -169,7 +169,7 @@ print("\nEssential Prime Implicants: "+', '.join(str(i) for i in EPI))
 removeTerms(chart,EPI) # Remove EPI related columns from chart
 
 if(len(chart) == 0): # If no minterms remain after removing EPI related columns
-    final_result = [findVariables(i) for i in EPI] # Final result with only EPIs
+    final_results =  [ [findVariables(i) for i in EPI] ] # Final result with only EPIs
 else: # Else follow Petrick's method for further simplification
     P = [[str(j) for j in chart[i]] for i in chart]    
     _A_INDEX = 65
@@ -183,13 +183,16 @@ else: # Else follow Petrick's method for further simplification
         P[1] = multiply(P[0],P[1])
         P.pop(0)
     P = P[0]
-    P = (  [k for k in j] for j in  set(("".join(sorted(i)) for i in P)) )
-    P = ( tempMap2convert(i, tempMap) for i in P )
-    P = ( [ findVariables(j) for j in i] for i in P )
+    P = [ [k for k in j] for j in  set(("".join(sorted(i)) for i in P)) ]
+    P = [ tempMap2convert(i, tempMap) for i in P ]
+    min_length = min((len(j) for j in P))
+    P = [ i for i in P if len(i) == min_length ]
+    P = [ [ findVariables(j) for j in i] for i in P ]       
+    [ i.extend(findVariables(j) for j in EPI) for i in P ]        
+    final_results = P
     
-    final_result = min(P,key=len) # Choosing the term with minimum variables from P    
-    final_result.extend(findVariables(i) for i in EPI) # Adding the EPIs to final solution
+for final_result in final_results:
+    print('\n\nSolution: F = '+' + '.join(''.join(i) for i in final_result))
 
-print('\n\nSolution: F = '+' + '.join(''.join(i) for i in final_result))
 
 input("\nPress enter to exit...")
